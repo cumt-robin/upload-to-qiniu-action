@@ -11,13 +11,7 @@ async function run() {
     const region = core.getInput('region');
     const localDir = core.getInput('local_dir');
 
-    const zones = {
-      z0: qiniu.zone.Zone_z0,
-      z1: qiniu.zone.Zone_z1,
-      z2: qiniu.zone.Zone_z2,
-      na0: qiniu.zone.Zone_na0
-    };
-    const zone = zones[region] || qiniu.zone.Zone_z0;
+    const zone = qiniu.zone[`Zone_${region}`] || qiniu.zone.Zone_z0;
 
     const mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
     const config = new qiniu.conf.Config();

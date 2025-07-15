@@ -11,7 +11,7 @@ inputs:
     description: '七牛 Bucket 名称'
     required: true
   region:
-    description: '七牛区域（z0/z1/z2/na0）'
+    description: '七牛区域'
     required: true
     default: 'z0'
   local_dir:

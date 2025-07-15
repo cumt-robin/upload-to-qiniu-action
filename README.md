@@ -33,7 +33,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Upload to Qiniu
-        uses: your-github-id/upload-to-qiniu-action@v1
+        uses: cumt-robin/upload-to-qiniu-action@v0.1.0
         with:
           access_key: ${{ secrets.QINIU_ACCESS_KEY }}
           secret_key: ${{ secrets.QINIU_SECRET_KEY }}
@@ -43,7 +43,6 @@ jobs:
 ```
 
 > **注意**  
-> - 请将 `your-github-id/upload-to-qiniu-action@v1` 替换为你发布的仓库地址和版本标签。  
 > - 七牛云密钥建议通过 GitHub Secrets 管理，避免明文暴露。  
 > - `local_dir` 是你本地构建好的静态文件目录，默认是 `dist`。
 
@@ -54,19 +53,8 @@ jobs:
 | `access_key`| 是       | 无     | 七牛云 Access Key            |
 | `secret_key`| 是       | 无     | 七牛云 Secret Key            |
 | `bucket`    | 是       | 无     | 七牛云存储空间名称           |
-| `region`    | 是       | `z0`   | 七牛云区域，支持 `z0`、`z1`、`z2`、`na0` |
+| `region`    | 是       | `z0`   | 七牛云区域，参考官方文档，目前支持 `z0`、`cn_east_2`、`z1`、`z2`、`na0`、`as0` |
 | `local_dir` | 是       | `dist` | 本地待上传目录               |
-
-## 目录结构
-
-```
-.
-├── action.yml          # Action 配置文件
-├── index.js            # 主执行脚本
-├── package.json        # 依赖声明
-├── README.md           # 使用说明
-└── node_modules/       # 依赖包（可选）
-```
 
 ## 开发与贡献
 
