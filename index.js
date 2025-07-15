@@ -11,11 +11,9 @@ async function run() {
     const region = core.getInput('region');
     const localDir = core.getInput('local_dir');
 
-    const zone = qiniu.zone[`Zone_${region}`] || qiniu.zone.Zone_z0;
-
     const mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
     const config = new qiniu.conf.Config();
-    config.zone = zone;
+    config.regionsProvider = qiniu.httpc.Region.fromRegionId(region);
 
     const options = { scope: bucket };
     const putPolicy = new qiniu.rs.PutPolicy(options);

@@ -33,7 +33,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Upload to Qiniu
-        uses: cumt-robin/upload-to-qiniu-action@v0.1.0
+        uses: cumt-robin/upload-to-qiniu-action@v1
         with:
           access_key: ${{ secrets.QINIU_ACCESS_KEY }}
           secret_key: ${{ secrets.QINIU_SECRET_KEY }}
@@ -53,7 +53,7 @@ jobs:
 | `access_key`| 是       | 无     | 七牛云 Access Key            |
 | `secret_key`| 是       | 无     | 七牛云 Secret Key            |
 | `bucket`    | 是       | 无     | 七牛云存储空间名称           |
-| `region`    | 是       | `z0`   | 七牛云区域，参考官方文档，目前支持 `z0`、`cn_east_2`、`z1`、`z2`、`na0`、`as0` |
+| `region`    | 是       | `z0`   | 七牛云区域，参考[官方文档](https://developer.qiniu.com/kodo/1671/region-endpoint-fq)，目前支持 `z0`、`cn_east_2`、`z1`、`z2`、`na0`、`as0`等 |
 | `local_dir` | 是       | `dist` | 本地待上传目录               |
 
 ## 开发与贡献
