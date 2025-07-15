@@ -1,0 +1,26 @@
+name: 'Upload to Qiniu Cloud'
+description: '上传静态文件到七牛云存储'
+inputs:
+  access_key:
+    description: '七牛 Access Key'
+    required: true
+  secret_key:
+    description: '七牛 Secret Key'
+    required: true
+  bucket:
+    description: '七牛 Bucket 名称'
+    required: true
+  region:
+    description: '七牛区域（z0/z1/z2/na0）'
+    required: true
+    default: 'z0'
+  local_dir:
+    description: '本地待上传目录'
+    required: true
+    default: 'dist'
+runs:
+  using: 'node16'
+  main: 'index.js'
+branding:
+  icon: 'upload-cloud'
+  color: 'blue'
