@@ -15,7 +15,11 @@ async function run() {
     const config = new qiniu.conf.Config();
     config.regionsProvider = qiniu.httpc.Region.fromRegionId(region);
 
-    const options = { scope: bucket };
+    // 设置上传策略，允许覆盖同名文件
+    const options = { 
+      scope: bucket,
+      insertOnly: 0  // 允许覆盖同名文件
+    };
     const putPolicy = new qiniu.rs.PutPolicy(options);
     const uploadToken = putPolicy.uploadToken(mac);
 

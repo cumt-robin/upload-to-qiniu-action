@@ -1,6 +1,6 @@
 {
   "name": "upload-to-qiniu-action",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "index.js",
   "scripts": {
     "build": "ncc build index.js -o dist",
