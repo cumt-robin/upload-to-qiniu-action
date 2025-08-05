@@ -1,6 +1,6 @@
 {
   "name": "upload-to-qiniu-action",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "index.js",
   "scripts": {
     "build": "ncc build index.js -o dist",
@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@actions/core": "^1.10.0",
+    "mime": "^4.0.7",
     "qiniu": "^7.14.0"
   },
   "devDependencies": {

@@ -2,6 +2,22 @@ const core = require('@actions/core');
 const qiniu = require('qiniu');
 const fs = require('fs');
 const path = require('path');
+const mime = require('mime').default;
+
+function getMimeType(filePath) {
+  return mime.getType(filePath) || 'application/octet-stream';
+}
+
+function walkDir(dir, callback) {
+  fs.readdirSync(dir).forEach(file => {
+    const fullPath = path.join(dir, file);
+    if (fs.statSync(fullPath).isDirectory()) {
+      walkDir(fullPath, callback);
+    } else {
+      callback(fullPath);
+    }
+  });
+}
 
 async function run() {
   try {
@@ -24,27 +40,32 @@ async function run() {
     const uploadToken = putPolicy.uploadToken(mac);
 
     const formUploader = new qiniu.form_up.FormUploader(config);
-    const putExtra = new qiniu.form_up.PutExtra();
-
-    function walkDir(dir, callback) {
-      fs.readdirSync(dir).forEach(file => {
-        const fullPath = path.join(dir, file);
-        if (fs.statSync(fullPath).isDirectory()) {
-          walkDir(fullPath, callback);
-        } else {
-          callback(fullPath);
-        }
-      });
-    }
 
     const baseDir = path.resolve(localDir);
     const files = [];
     walkDir(baseDir, filePath => files.push(filePath));
 
-    for (const filePath of files) {
+    const sortedFiles = files.filter(filePath => !filePath.includes(path.join(baseDir, 'index.html')));
+    const indexHtmlFile = files.find(filePath => filePath.includes(path.join(baseDir, 'index.html')));
+
+    if (indexHtmlFile) {
+      sortedFiles.push(indexHtmlFile);
+    }
+
+    for (const filePath of sortedFiles) {
       const key = path.relative(baseDir, filePath).replace(/\\/g, '/');
       await new Promise((resolve, reject) => {
-        formUploader.putFile(uploadToken, key, filePath, putExtra, (err, body, info) => {
+        let uToken = uploadToken
+        if (['.html', '.xml', '.svg'].some(ext => key.endsWith(ext))) {
+          const tempPolicy = new qiniu.rs.PutPolicy({
+            scope: `${bucket}:${key}`,
+            insertOnly: 0,
+          });
+          uToken = tempPolicy.uploadToken(mac);
+        }
+        const putExtra = new qiniu.form_up.PutExtra();
+        putExtra.mimeType = getMimeType(filePath);
+        formUploader.putFile(uToken, key, filePath, putExtra, (err, body, info) => {
           if (err) return reject(err);
           if (info.statusCode === 200) {
             core.info(`上传成功: ${key}`);
